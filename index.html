@@ -27,6 +27,27 @@
                     'mousedown',
                     marker,
                     function(evt) {
+                        var pops = map.popups;
+                            for(var a = 0; a < pops.length; a++){
+                            map.removePopup(map.popups[a]);
+                        };
+                        popup = new OpenLayers.Popup("popup",
+                                coordinate,
+                                new OpenLayers.Size(popupWidth, popupHeight),
+                                message, 
+                                true);
+                        map.addPopup(popup);
+                        OpenLayers.Event.stop(evt);
+                    }
+                );
+                marker.events.register(
+                    'touchend',
+                    marker,
+                    function(evt) {
+                        var pops = map.popups;
+                            for(var a = 0; a < pops.length; a++){
+                            map.removePopup(map.popups[a]);
+                        };
                         popup = new OpenLayers.Popup("popup",
                                 coordinate,
                                 new OpenLayers.Size(popupWidth, popupHeight),
@@ -39,8 +60,8 @@
                 markers.addMarker(marker);
             }
 
-            mark(-6.175392, 106.827153, 200, 50, 'Monas');
-            mark(-6.1456361, 106.8296376, 200, 50, `
+            mark(-6.175392, 106.827153, 400, 80, 'Monas');
+            mark(-6.1456361, 106.8296376, 400, 80, `
             Museum Sejarah Jakarta<br>
             Museum Sejarah Jakarta
             `);
