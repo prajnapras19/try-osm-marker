@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <title>Peta</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <div id="mapdiv"></div>
+        <script src="/assets/OpenLayers.js"></script>
+        <script>
+            map = new OpenLayers.Map("mapdiv");
+            map.addLayer(new OpenLayers.Layer.OSM());
+            var markers = new OpenLayers.Layer.Markers( "Markers" );
+            map.addLayer(markers);
+
+            function getLonLat(longitude, latitude) {
+                return new OpenLayers.LonLat(latitude, longitude)
+                .transform(
+                    new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+                    map.getProjectionObject() // to Spherical Mercator Projection
+                );
+            }
+
+            function mark(latitude, longitude, popupWidth, popupHeight, message) {
+                var coordinate = getLonLat(latitude, longitude);
+                marker = new OpenLayers.Marker(coordinate);
+                marker.events.register(
+                    'mousedown',
+                    marker,
+                    function(evt) {
+                        popup = new OpenLayers.Popup("popup",
+                                coordinate,
+                                new OpenLayers.Size(popupWidth, popupHeight),
+                                message, 
+                                true);
+                        map.addPopup(popup);
+                        OpenLayers.Event.stop(evt);
+                    }
+                );
+                markers.addMarker(marker);
+            }
+
+            mark(-6.175392, 106.827153, 200, 50, 'Monas');
+            mark(-6.1456361, 106.8296376, 200, 50, `
+            Museum Sejarah Jakarta<br>
+            Museum Sejarah Jakarta
+            `);
+
+            var zoom = 13.495;
+            map.setCenter(getLonLat(-6.175392, 106.827153), zoom);
+        </script>
+    </body>
+</html>
